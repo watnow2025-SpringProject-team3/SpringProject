@@ -1,5 +1,5 @@
 ---
-name: issueのタイトル
+name: template
 about: Suggest an idea for this project
 title: "[Feat]"
 labels: ''
