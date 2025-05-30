@@ -12,23 +12,23 @@ export async function createClient() {
         process.env.SUPABASE_ANON_KEY!,
         {
             cookies: {
-                get(name: string) {
-                    return cookieStore.get(name)?.value;
+                async get(name: string) {
+                    return (await cookieStore).get(name)?.value;
                 },
-                set(name: string, value: string, options: CookieOptions) {
+                async set(name: string, value: string, options: CookieOptions) {
                     try {
                         if (typeof window === 'undefined') {
-                            cookieStore.set({ name, value, ...options });
+                            (await cookieStore).set({ name, value, ...options });
                         }
                     } catch (error) {
                         // Server Component内でのCookie設定エラーを無視
                         // ミドルウェアでCookieが処理される
                     }
                 },
-                remove(name: string, options: CookieOptions) {
+                async remove(name: string, options: CookieOptions) {
                     try {
                         if (typeof window === 'undefined') {
-                            cookieStore.set({ name, value: '', ...options, maxAge: 0 });
+                            (await cookieStore).set({ name, value: '', ...options, maxAge: 0 });
                         }
                     } catch (error) {
                         // Server Component内でのCookie削除エラーを無視
