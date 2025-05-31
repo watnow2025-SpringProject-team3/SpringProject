@@ -1,5 +1,3 @@
-// lib/supabase-auth/middleware.ts
-
 import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
