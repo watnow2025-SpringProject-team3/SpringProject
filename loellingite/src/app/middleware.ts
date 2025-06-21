@@ -3,6 +3,7 @@ import { updateSession } from '../../lib/supabase-auth/middleware'
 
 
 export async function middleware(request: NextRequest) {
+  console.log('Middleware triggered for request:', request.url)
     return await updateSession(request)
 }
 
