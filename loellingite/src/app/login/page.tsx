@@ -12,12 +12,12 @@ export default function LoginPage() {
                     <input
                         type="email"
                         placeholder="メールアドレス"
-                        className="w-full px-4 py-3 text-white bg-[#d8c7c7] rounded-lg focus:outline-none placeholder-white"
+                        className="w-full px-4 py-3 text-white bg-[#d8c7c7] rounded-lg focus:outline-none placeholder-white border border-[#7B5858]"
                     />
                     <input
                         type="password"
                         placeholder="パスワード"
-                        className="w-full px-4 py-3 text-white bg-[#d8c7c7] rounded-lg focus:outline-none placeholder-white"
+                        className="w-full px-4 py-3 text-white bg-[#d8c7c7] rounded-lg focus:outline-none placeholder-white border border-[#7B5858]"
                     />
                 </div>
 
