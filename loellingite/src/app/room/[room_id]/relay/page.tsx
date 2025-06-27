@@ -6,17 +6,21 @@ import RelayCard from "@/features/relay/RelayCard";
 const relays = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
   name: "リレー名",
-  topic: "投稿のお題がここに表示されます。"
+  topic: "投稿のお題がここに表示されます。",
 }));
 
 export default function RelayListPage() {
   return (
-    <div className="min-h-screen bg-[#F7F3F1] flex flex-col">
+    <div className="min-h-screen bg-primaryBackground flex flex-col">
       {/* ヘッダー */}
-      <header className="bg-[#7B5858] text-white h-14 flex items-center justify-between px-4 sticky top-0 z-10">
-        <button className="p-2"><MdArrowBack size={28} /></button>
+      <header className="bg-[hsl(var(--color-header-bg))]  h-14 flex items-center justify-between px-4 sticky top-0 z-10">
+        <button className="p-2" title="戻る">
+          <MdArrowBack size={28} />
+        </button>
         <span className="text-lg font-medium">ルーム名</span>
-        <button className="p-2"><MdEdit size={24} /></button>
+        <button className="p-2" title="編集">
+          <MdEdit size={24} />
+        </button>
       </header>
 
       {/* リスト */}
@@ -27,7 +31,7 @@ export default function RelayListPage() {
       </div>
 
       {/* フッター */}
-      <footer className="bg-[#7B5858] text-white h-16 flex justify-around items-center fixed bottom-0 left-0 w-full z-20">
+      <footer className="bg-primaryFooter  h-16 flex justify-around items-center fixed bottom-0 left-0 w-full z-20">
         <div className="flex flex-col items-center">
           <MdHome size={28} />
           <span className="text-xs mt-1">ホーム</span>

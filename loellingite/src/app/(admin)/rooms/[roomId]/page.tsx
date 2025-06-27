@@ -1,36 +1,29 @@
-// ルームホーム画面
+// ルーム/リレー一覧
 
-"use client";
+import React from "react";
+import MenuButton from "@/component/MenuButton";
+import BackButton from "@/component/BackButton";
+import RelayList from "@/features/relay/RelayList";
 
-import RoomDetailGrid from "@/features/relay/RelaysGridWithText";
-import { IoArrowBack } from "react-icons/io5";
-
-// ダミーデータ
-const cards = Array.from({ length: 8 }, (_, i) => ({
-  id: i + 1,
-}));
-
-export default function RoomHomePage() {
+const RoomHome = () => {
   return (
-    <div className="min-h-screen h-screen flex flex-col bg-[#f7f5f3]">
+    <div className="min-h-screen h-screen">
       {/* ヘッダー */}
-      <header className="bg-[#7B5858] text-white px-0 pt-4 pb-3 flex items-center justify-between border-b border-white relative flex-shrink-0">
-        <button
-          onClick={() => window.history.back()}
-          className="text-white hover:text-gray-200 transition-colors p-2 ml-2"
-          aria-label="戻る"
-        >
-          <IoArrowBack className="w-6 h-6" />
-        </button>
-        <span className="text-[20px] absolute left-1/2 transform -translate-x-1/2">
-          ルーム名
-        </span>
+      <header className="fixed top-0 left-0 w-full bg-[#7B5858] text-white px-4 py-3 flex items-center justify-between shadow z-50">
+        <BackButton />
+
+        <span className="text-[20px] mx-auto">ルーム名</span>
+        
+        <MenuButton />
       </header>
 
-      {/* ルーム詳細グリッド */}
-      <main className="flex-1 overflow-y-auto flex flex-col items-center py-6">
-        <RoomDetailGrid cards={cards} />
+      {/* リレー一覧 */}
+      <main className="flex-1 px-4 py-2">
+        <p className="text-gray-600">ここにリレーの一覧が表示されます。</p>
+        <RelayList roomId="roomId" />
       </main>
     </div>
   );
-}
+};
+
+export default RoomHome;

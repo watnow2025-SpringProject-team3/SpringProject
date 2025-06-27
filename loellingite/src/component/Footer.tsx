@@ -39,12 +39,12 @@ export default function Footer() {
       onClick: () => window.location.href = "/search",
       activeIcon: <IoSearch className="w-6 h-6" />,
       inactiveIcon: <IoSearchOutline className="w-6 h-6" />,
-      isActive: pathname.startsWith("/search"),
+      isActive: pathname.startsWith("/rooms"),
     },
   ];
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#7B5858]/20 z-50">
+    <footer className="fixed bottom-0 left-0 right-0 bg-primaryBackground border-t border-primaryBorder z-50">
       <nav className="flex justify-around items-center h-16 px-4">
         {navItems.map((item, index) => {
           const active = item.isActive || false;
@@ -57,8 +57,8 @@ export default function Footer() {
                 onClick={item.onClick}
                 className="flex flex-col items-center justify-center min-w-0 flex-1 py-2"
               >
-                <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg border-2 border-[#7B5858]/10">
-                  <div className="text-[#7B5858]">
+                <div className="bg-primaryBackground rounded-full w-12 h-12 flex items-center justify-center shadow-lg border-2 border-primaryBorder">
+                  <div className="text-primaryText">
                     {item.activeIcon}
                   </div>
                 </div>

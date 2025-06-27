@@ -20,7 +20,7 @@ export default function RoomList({ rooms }: RoomListProps) {
             href={`/rooms/${room.id}`}
             className="flex items-center gap-4 px-4 py-4 hover:bg-gray-50 transition"
           >
-            <div className="flex-shrink-0 w-12 h-12 bg-[#E0D6D6] rounded-full flex items-center justify-center">
+            <div className="flex-shrink-0 w-12 h-12 bg-stone-200 rounded-full flex items-center justify-center">
               <IoChatbubblesOutline className="text-gray-500 w-6 h-6" />
             </div>
             <div className="flex-1 min-w-0">
