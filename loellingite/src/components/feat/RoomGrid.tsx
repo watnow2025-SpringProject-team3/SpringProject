@@ -13,9 +13,9 @@ interface RoomGridProps {
 export default function RoomGrid({ rooms }: RoomGridProps) {
   return (
     <div className="max-w-2xl mx-auto">
-      <ul className="bg-white/30">
+      <ul className="space-y-4">
         {rooms.map((room) => (
-          <li key={room.id} className="border-b-[0.5px] border-[#7B5858]">
+          <li key={room.id} className="flex border-2 border-[#8B6B67] rounded-2xl p-5 mb-6 bg-white items-start gap-4">
             <Link href={`/room/${room.id}`} passHref>
               <div className="p-4 flex items-center space-x-4">
                 <div className="w-14 h-14 rounded-full bg-[#E0D8D4] flex-shrink-0 border-[#7B5858] border-[0.5px]"></div>

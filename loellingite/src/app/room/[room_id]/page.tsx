@@ -2,11 +2,12 @@ import React from "react";
 import RoomDetailGrid from "@/components/feat/RoomDetailGrid";
 import { MdArrowBack, MdEdit, MdHome, MdAddAPhoto } from "react-icons/md";
 
-const RoomHome = () => {
-  // ダミーデータ
-  const cards = Array.from({ length: 8 }, (_, i) => ({
-    id: i + 1,
-  }));
+// ダミーデータ
+const cards = Array.from({ length: 8 }, (_, i) => ({
+  id: i + 1,
+}));
+
+export default function RoomHome() {
 
   return (
     <div className="min-h-screen h-screen flex flex-col bg-[#f7f5f3] relative">
@@ -36,5 +37,3 @@ const RoomHome = () => {
     </div>
   );
 };
-
-export default RoomHome;

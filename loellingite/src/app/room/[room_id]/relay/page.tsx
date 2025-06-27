@@ -2,12 +2,12 @@ import React from "react";
 import { MdHome, MdAddAPhoto, MdArrowBack, MdEdit } from "react-icons/md";
 import RelayCard from "@/components/feat/RelayCard";
 
-const dummyRelays = [
-  { id: 1, name: "リレー名", topic: "投稿のお題がここに表示されます。" },
-  { id: 2, name: "リレー名", topic: "投稿のお題がここに表示されます。" },
-  { id: 3, name: "リレー名", topic: "投稿のお題がここに表示されます。" },
-  { id: 4, name: "リレー名", topic: "投稿のお題がここに表示されます。" },
-];
+// ダミーデータ
+const relays = Array.from({ length: 8 }, (_, i) => ({
+  id: i + 1,
+  name: "リレー名",
+  topic: "投稿のお題がここに表示されます。"
+}));
 
 export default function RelayListPage() {
   return (
@@ -21,8 +21,8 @@ export default function RelayListPage() {
 
       {/* リスト */}
       <div className="flex-1 overflow-y-auto px-4 pt-8 pb-32 max-w-2xl mx-auto w-full">
-        {dummyRelays.map((relay) => (
-          <RelayCard key={relay.id} name={relay.name} topic={relay.topic} />
+        {relays.map((relay) => (
+          <RelayCard key={relay.id} relays={relays} />
         ))}
       </div>
 
