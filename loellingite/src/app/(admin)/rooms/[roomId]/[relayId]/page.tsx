@@ -1,55 +1,46 @@
-// リレー詳細画面
+import React from "react";
+import { MdHome, MdAddAPhoto, MdArrowBack, MdEdit } from "react-icons/md";
+import RelayCard from "@/features/relay/RelayCard";
 
-import Link from "next/link";
+// ダミーデータ
+const relays = Array.from({ length: 8 }, (_, i) => ({
+  id: i + 1,
+  name: "リレー名",
+  topic: "投稿のお題がここに表示されます。",
+}));
 
-type Post = {
-  id: string;
-  title: string;
-  createdAt: string;
-  image: string;
-};
-
-const dummyRelay = {
-  id: "r1",
-  name: "リレー1",
-  description: "このリレーは会議の進行用です。",
-  createdAt: "2025-06-10",
-};
-
-const dummyPosts: Post[] = [
-  { id: "p1", title: "最初の投稿", createdAt: "2025-06-11", image: "/images/post1.jpg" },
-  { id: "p2", title: "議事録", createdAt: "2025-06-12", image: "/images/post2.jpg" },
-];
-
-export default function RelayDetailPage() {
+export default function RelayListPage() {
   return (
-    <main className="min-h-screen bg-background pt-16">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-primary text-primary-foreground rounded shadow-md p-6 text-center mb-6">
-          <h1 className="text-4xl font-bold mb-2">{dummyRelay.name}</h1>
-          <p className="text-lg">{dummyRelay.description}</p>
-          <p className="text-sm mt-2">作成日: {dummyRelay.createdAt}</p>
-        </div>
-        <div className="space-y-6">
-          {dummyPosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/rooms/relays/posts/${post.id}`}
-              className="bg-card rounded shadow overflow-hidden block"
-            >
-              <img src={post.image} alt={post.title} className="w-full h-64 object-cover" />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-foreground mb-2">{post.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">作成日: {post.createdAt}</p>
-                <div className="flex justify-between items-center">
-                  <button className="text-primary hover:underline">いいね</button>
-                  <span className="text-primary hover:underline">コメント</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+    <div className="min-h-screen bg-primaryBackground flex flex-col">
+      {/* ヘッダー */}
+      <header className="bg-[hsl(var(--color-header-bg))]  h-14 flex items-center justify-between px-4 sticky top-0 z-10">
+        <button className="p-2" title="戻る">
+          <MdArrowBack size={28} />
+        </button>
+        <span className="text-lg font-medium">ルーム名</span>
+        <button className="p-2" title="編集">
+          <MdEdit size={24} />
+        </button>
+      </header>
+
+      {/* リスト */}
+      <div className="flex-1 overflow-y-auto px-4 pt-8 pb-32 max-w-2xl mx-auto w-full">
+        {relays.map((relay) => (
+          <RelayCard key={relay.id} relays={relays} />
+        ))}
       </div>
-    </main>
+
+      {/* フッター */}
+      <footer className="bg-primaryFooter  h-16 flex justify-around items-center fixed bottom-0 left-0 w-full z-20">
+        <div className="flex flex-col items-center">
+          <MdHome size={28} />
+          <span className="text-xs mt-1">ホーム</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <MdAddAPhoto size={28} />
+          <span className="text-xs mt-1">追加</span>
+        </div>
+      </footer>
+    </div>
   );
 }

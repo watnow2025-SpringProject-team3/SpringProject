@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
-import Header from "@/component/Header";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function AuthLayout({
@@ -14,19 +13,19 @@ export default async function AuthLayout({
     const supabase = createSupabaseServerClient();
     const user = await supabase.auth.getUser();
 
-    isLoggedIn = !!user;
+    isLoggedIn = user.data.user !== null;
   } catch {
     isLoggedIn = false;
   }
   console.log("User logged in:", isLoggedIn);
 
   if (isLoggedIn) {
+    console.log("User is logged in, redirecting to /rooms");
     redirect("/rooms");
   }
 
   return (
     <>
-      <Header title="サービス名" href="/" />
       {children}
     </>
   );

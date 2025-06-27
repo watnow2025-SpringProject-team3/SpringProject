@@ -9,7 +9,7 @@ const RelayList = ({ roomId }: { roomId: string }) => {
         <div
           key={index}
           className="mb-4 flex items-center border border-[#7B5858] rounded-lg p-6 min-h-[120px] bg-white cursor-pointer"
-          onClick={() => window.location.href = `/rooms/${roomId}/relays/${index}`}
+          onClick={() => window.location.href = `/rooms/${roomId}/${index}`}
         >
           {/* 左の画像 */}
           <div className="w-24 h-24 bg-[#E0D9D9] rounded-md flex-shrink-0" />
