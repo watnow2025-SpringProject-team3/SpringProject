@@ -1,4 +1,3 @@
-import Footer from "@/component/Footer";
 import RoomList from "@/features/room/RoomList";
 import { Room } from "@/types";
 
@@ -12,11 +11,16 @@ const rooms: Room[] = Array.from({ length: 8 }, (_, i) => ({
 export default function RoomPage() {
   return (
     <div className="min-h-screen font-Noto Serif">
-      <header className="bg-header shadow-md sticky top-0 z-10 h-16 flex items-center justify-end px-4 sm:px-6" />
+      <header className="bg-primary shadow-md sticky top-0 z-10 h-16 flex items-center justify-end px-4 sm:px-6" />
       <div className="max-w-2xl mx-auto">
         <RoomList rooms={rooms} />
       </div>
-      <Footer />
+      <button
+        className="fixed bottom-6 right-6 bg-primary text-white rounded-full p-4 shadow-lg hover:bg-primary-dark"
+        aria-label="Add Room"
+      >
+        ＋
+      </button>
     </div>
   );
 }

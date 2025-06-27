@@ -9,14 +9,6 @@
   --muted: 0 0% 80%;
   --border: 30 35% 25%;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  /* プロジェクトカラーでTailwindの標準カラーを上書き */
-  /* カスタムカラー定義 */
-  --color-header-bg: 123 88 88; /* #7B5858 - ヘッダー背景色 */
-  .bg-header {
-    background-color: #7B5858;
-  }
-
 }
 
 @media (prefers-color-scheme: dark) {
