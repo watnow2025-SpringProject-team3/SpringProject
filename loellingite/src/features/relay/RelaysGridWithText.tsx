@@ -1,32 +1,39 @@
-interface RoomDetailCard {
-  id: number;
-  title?: string;
-  content?: string;
-}
+import Link from "next/link";
 
-interface RoomDetailGridProps {
-  cards: RoomDetailCard[];
+import { Relays } from "@/types/Relays";
+interface RelaysGridProps {
+  relays: Relays[];
   className?: string;
 }
 
-export default function RoomDetailGrid({ cards, className = "" }: RoomDetailGridProps) {
+export default function RelaysGridWithText({
+  relays,
+  className,
+}: RelaysGridProps) {
   return (
-    <div className={`grid grid-cols-2 gap-5 w-[90%] max-w-[420px] mx-auto ${className}`}>
-      {cards.map((card) => (
-        <div 
-          key={card.id} 
-          className="bg-[#E0D9D9] border border-[#7B5858] rounded-2xl min-h-[160px] min-w-[140px] aspect-square flex items-center justify-center cursor-pointer hover:bg-[#D5CECE] transition-colors"
-        >
-          {card.title && (
-            <div className="text-center">
-              <h3 className="text-[#7B5858] font-medium">{card.title}</h3>
-              {card.content && (
-                <p className="text-[#7B5858] text-sm mt-1">{card.content}</p>
-              )}
-            </div>
-          )}
-        </div>
-      ))}
+    <div className={`max-w-2xl mx-auto ${className}`}>
+      <ul className="space-y-4">
+        {relays.map((relay) => (
+          <li
+            key={relay.id}
+            className="flex border-2 border-primaryBorder rounded-2xl p-5 mb-6 bg-primaryBackground items-start gap-4"
+          >
+            <Link href={`/rooms/${relay.id}`} passHref>
+              <div className="p-4 flex items-center space-x-4">
+                <div className="w-14 h-14 rounded-full bg-primaryLight flex-shrink-0 border-primaryBorder border-[0.5px]"></div>
+                <div className="flex-grow">
+                  <h2 className="text-lg font-medium text-primaryText">
+                    {relay.name}
+                  </h2>
+                  <p className="text-sm text-primaryText">
+                    {relay.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-} 
+}

@@ -34,7 +34,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#F3F0F0]">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-primaryBackground">
       <form onSubmit={handleEmailLogin} className="w-full max-w-xs space-y-6">
         <div className="bg-gray-300 h-32 w-full">ロゴ？</div>
 
@@ -52,7 +52,7 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={isLoading}
-            className="w-full px-4 py-3 text-white bg-[#7B585880] rounded-lg focus:outline-none placeholder-white border border-[#7B5858] disabled:opacity-50"
+            className="w-full px-4 py-3  bg-primaryLight rounded-lg focus:outline-none placeholder-white border border-primaryBorder disabled:opacity-50"
           />
           <input
             type="password"
@@ -61,14 +61,14 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             disabled={isLoading}
-            className="w-full px-4 py-3 text-white bg-[#7B585880] rounded-lg focus:outline-none placeholder-white border border-[#7B5858] disabled:opacity-50"
+            className="w-full px-4 py-3  bg-[#7B585880] rounded-lg focus:outline-none placeholder-white border border-[#7B5858] disabled:opacity-50"
           />
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full px-4 py-3 font-bold text-white bg-[#8b6f6f] rounded-lg hover:bg-opacity-90 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 font-bold  bg-primaryHeader rounded-lg hover:bg-opacity-90 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "ログイン中..." : "ログイン"}
         </button>
@@ -77,7 +77,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="text-[#8b6f6f] hover:underline"
+            className="text-primaryText hover:underline"
           >
             Googleでログイン
           </button>
