@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import Header from "@/component/Header";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function AuthLayout({
   children,
@@ -10,7 +11,8 @@ export default async function AuthLayout({
   let isLoggedIn = false;
   console.log("AuthLayout rendering...");
   try {
-    const user = await getUser();
+    const supabase = createSupabaseServerClient();
+    const user = await supabase.auth.getUser();
 
     isLoggedIn = !!user;
   } catch {

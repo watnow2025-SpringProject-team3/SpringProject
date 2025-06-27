@@ -1,41 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { serverSignInWithGoogle } from "@/lib/supabase/authGoogle";
-import { signInWithEmailAndPassword } from "@/lib/supabase/auth";
+
+import { browserSignInWithGoogle } from "@/lib/supabase/authGoogle";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const router = useRouter();
+  const [isLoading] = useState(false);
+  const [error] = useState("");
 
   const handleGoogleLogin = async () => {
-    await serverSignInWithGoogle();
-  };
-
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-
-    try {
-      await signInWithEmailAndPassword(email, password);
-      router.push("/rooms");
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "ログインに失敗しました";
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    await browserSignInWithGoogle();
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-primaryBackground">
-      <form onSubmit={handleEmailLogin} className="w-full max-w-xs space-y-6">
+      <form onSubmit={() => {}} className="w-full max-w-xs space-y-6">
         <div className="bg-gray-300 h-32 w-full">ロゴ？</div>
 
         {error && (
