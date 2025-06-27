@@ -56,6 +56,7 @@ export default function RoomPageClient({ initialRooms, requiresAuth = false }: R
         .from("room")
         .insert({
           title: roomData.name,
+          created_by: user.id,
         })
         .select()
         .single();
