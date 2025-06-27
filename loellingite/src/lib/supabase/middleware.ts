@@ -35,32 +35,76 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  let authError: any = null;
 
-  // 認証が必要なパス（(admin)ルートグループ配下）
-  const protectedPaths = ["/rooms", "/settings", "/relay"];
-  const isProtectedPath = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+    authError = result.error;
+  } catch (error: any) {
+    console.error("Middleware auth error (catch):", error);
+    authError = error;
+    user = null;
+  }
+
+  // 認証エラーがある場合の処理
+  if (authError) {
+    console.error("Middleware auth error:", authError.message || authError);
+    // AuthSessionMissingErrorの場合は、セッションが存在しないということなので、未認証として扱う
+    if (
+      (authError.message && authError.message.includes('Auth session missing')) || 
+      authError.__isAuthError ||
+      authError.name === 'AuthSessionMissingError'
+    ) {
+      console.log("Auth session missing - treating as unauthenticated");
+      user = null;
+      authError = null; // このエラーは予想される状況なので、エラーとして扱わない
+    }
+  }
+
+  const pathname = request.nextUrl.pathname;
+
+  // (admin)ルートグループ：認証必須（/rooms, /settings配下のすべて）
+  const isAdminPath =
+    pathname.startsWith("/rooms") || pathname.startsWith("/settings");
+
+  // (auth)ルートグループ：非認証必須（/login, /signup）
+  const isAuthPath = pathname === "/login" || pathname === "/signup";
+
+  // 認証が必要なパス全体
+  const requiresAuth = isAdminPath;
+
+  // ルートパスの処理
+  if (pathname === "/") {
+    const url = request.nextUrl.clone();
+    if (user && !authError) {
+      url.pathname = "/rooms";
+    } else {
+      url.pathname = "/login";
+    }
+    return NextResponse.redirect(url);
+  }
+
   console.log(
-    `Request path: ${request.nextUrl.pathname}, isProtectedPath: ${isProtectedPath}`
+    `Request path: ${pathname}, isAdminPath: ${isAdminPath}, isAuthPath: ${isAuthPath}, user: ${
+      user ? "authenticated" : "not authenticated"
+    }, authError: ${authError ? authError.message : "none"}`
   );
 
-  if (!user && isProtectedPath) {
-    // ログインしていない場合、ログインページにリダイレクト
+  // 認証が必要なパス（(admin)ルートグループ + 既存の/room/パス）の認証チェック
+  if (requiresAuth && (!user || authError)) {
+    console.log(
+      `Redirecting unauthenticated user from protected path: ${pathname}`
+    );
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  if (
-    user &&
-    (request.nextUrl.pathname === "/login" ||
-      request.nextUrl.pathname === "/signup")
-  ) {
-    // ログイン済みの場合、ログイン/サインアップページからルーム一覧にリダイレクト
+  // (auth)ルートグループの認証チェック：非ログイン必須
+  if (isAuthPath && user && !authError) {
+    console.log(`Redirecting authenticated user from auth path: ${pathname}`);
     const url = request.nextUrl.clone();
     url.pathname = "/rooms";
     return NextResponse.redirect(url);

@@ -51,27 +51,9 @@ export async function GET(request: NextRequest) {
       if (data?.session) {
         console.log("Auth successful, user:", data.session.user.email);
 
-        // セッションが正常に作成された場合
-        const response = NextResponse.redirect(`${origin}${next}`);
-
-        // クッキーを手動で設定
-        response.cookies.set("sb-access-token", data.session.access_token, {
-          path: "/",
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          maxAge: 60 * 60 * 24 * 7, // 7日間
-        });
-
-        response.cookies.set("sb-refresh-token", data.session.refresh_token, {
-          path: "/",
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          maxAge: 60 * 60 * 24 * 30, // 30日間
-        });
-
-        return response;
+        // セッションが正常に作成された場合、単純にリダイレクト
+        // クッキーはSupabaseが自動的に設定する
+        return NextResponse.redirect(`${origin}${next}`);
       }
     } catch (error) {
       console.error("Auth callback error:", error);

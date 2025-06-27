@@ -18,11 +18,44 @@ export async function createSupabaseServerClient() {
             cookiesToSet.forEach(({ name, value, options }) => {
               cookieStore.set(name, value, options);
             });
-          } catch {
+          } catch (error) {
             // Server Components では set できない場合があるため無視
+            console.debug("Server client cookie setting ignored:", error);
           }
         },
       },
     }
   );
+}
+
+// サーバーサイドでの安全な認証ユーザー取得
+export async function getServerUser() {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const result = await supabase.auth.getUser();
+    
+    if (result.error) {
+      // AuthSessionMissingErrorは予想される状況
+      if (
+        result.error.message?.includes('Auth session missing') ||
+        (result.error as any).__isAuthError ||
+        (result.error as any).name === 'AuthSessionMissingError'
+      ) {
+        return { user: null, error: null };
+      }
+      return { user: null, error: result.error };
+    }
+    
+    return { user: result.data.user, error: null };
+  } catch (error: any) {
+    // AuthSessionMissingErrorは予想される状況
+    if (
+      error.message?.includes('Auth session missing') ||
+      error.__isAuthError ||
+      error.name === 'AuthSessionMissingError'
+    ) {
+      return { user: null, error: null };
+    }
+    return { user: null, error };
+  }
 }

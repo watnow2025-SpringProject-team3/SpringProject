@@ -12,8 +12,21 @@ interface SideMenuProps {
 
 const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
   const supabase = createSupabaseBrowserClient();
-  const handleLogout = () => {
-    supabase.auth.signOut();
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Logout error:", error);
+      }
+      onClose();
+      // ログアウト後にログインページにリダイレクト
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      onClose();
+      // エラーが発生してもログインページにリダイレクト
+      window.location.href = "/login";
+    }
   };
 
   return (
