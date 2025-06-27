@@ -6,7 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import MenuLayout from "@/component/MenuLayout";
 
 async function fetchRooms(): Promise<Room[]> {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   // 現在のユーザーを取得
   const {
