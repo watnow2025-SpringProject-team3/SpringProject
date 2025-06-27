@@ -1,6 +1,6 @@
 import React from "react";
 import { MdHome, MdAddAPhoto, MdArrowBack, MdEdit } from "react-icons/md";
-import RelayCard from "@/components/feat/RelayCard";
+import RelayCard from "@/features/relay/RelayCard";
 
 // ダミーデータ
 const relays = Array.from({ length: 8 }, (_, i) => ({
