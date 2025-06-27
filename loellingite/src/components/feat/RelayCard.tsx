@@ -1,6 +1,6 @@
 import React from "react";
 
-type RelayCardProps = {
+interface RelayCardProps {
   name: string;
   topic: string;
 };
