@@ -3,8 +3,8 @@ import { IoChatbubblesOutline } from "react-icons/io5";
 
 interface Room {
   id: number;
-  name: string;
-  description: string;
+  title: string; // room.name を room.title に変更
+  created_at: string; // description の代わりに created_at を追加
 }
 
 interface RoomListProps {
@@ -24,8 +24,12 @@ export default function RoomList({ rooms }: RoomListProps) {
               <IoChatbubblesOutline className="text-gray-500 w-6 h-6" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-gray-900">{room.name}</div>
-              <div className="text-gray-500 text-sm">{room.description}</div>
+              {/* room.name → room.title に変更 */}
+              <div className="font-semibold text-gray-900">{room.title}</div>
+              {/* descriptionはSupabaseにないので削除またはフォールバック */}
+              <div className="text-gray-500 text-sm">
+                作成日: {new Date(room.created_at).toLocaleDateString()}
+              </div>
             </div>
           </Link>
         </li>

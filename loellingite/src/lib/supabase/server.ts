@@ -11,17 +11,8 @@ export function createSupabaseServerClient() {
           const cookieStore = await cookies();
           return cookieStore.getAll();
         },
-        async setAll(cookiesToSet) {
-          try {
-            const cookieStore = await cookies();
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch (error) {
-            // The `cookies()` helper can be called only from a Server Component, Route Handler or Server Action.
-            // This error is silently ignored if you're not in a Server Context.
-            console.warn("Could not set cookie:", error);
-          }
+        async setAll() {
+          // Server Componentでは何もしない
         },
       },
     }
