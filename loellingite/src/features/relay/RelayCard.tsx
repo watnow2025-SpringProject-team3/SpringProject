@@ -1,11 +1,5 @@
 import React from "react";
-
-interface Relay {
-  id: number;
-  name: string;
-  topic: string;
-}
-
+import { Relay } from "@/types/relay";
 interface RelayCardProps {
     relays: Relay[];
 }
@@ -20,7 +14,7 @@ export default function RelayCard({ relays }: RelayCardProps) {
             <div className="absolute top-0 right-0 w-12 h-12 bg-primaryLight rounded-full border border-primaryBorder" />
             <div className="mt-2 ml-0">
               <div className="text-[28px] font-medium text-primaryText">{relay.name}</div>
-              <div className="text-[20px] text-primaryText mt-1">{relay.topic}</div>
+              <div className="text-[20px] text-primaryText mt-1">{relay.description}</div>
             </div>
           </div>
         </li>

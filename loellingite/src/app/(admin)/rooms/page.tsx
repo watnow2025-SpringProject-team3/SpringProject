@@ -1,11 +1,12 @@
 import Footer from "@/component/Footer";
 import RoomList from "@/features/room/RoomList";
+import { Room } from "@/types";
 
 // ダミーデータ
-const rooms = Array.from({ length: 8 }, (_, i) => ({
+const rooms: Room[] = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
-  name: "ルーム名",
-  description: "詳細",
+  name: `ルーム ${i + 1}`,
+  description: `詳細 ${i + 1}`,
 }));
 
 export default function RoomPage() {

@@ -1,8 +1,9 @@
 import Link from "next/link";
 
-import { Relays } from "@/types/Relays";
+import { Relay } from "@/types/relay";
+
 interface RelaysGridProps {
-  relays: Relays[];
+  relays: Relay[];
   className?: string;
 }
 

@@ -1,9 +1,4 @@
-
-interface Relay {
-  id: number;
-  name: string;
-  description: string;
-}
+import { Relay } from "@/types/relay";
 
 interface RelaysGridProps {
   relays: Relay[];
@@ -21,7 +16,9 @@ export default function RelaysGrid({ relays }: RelaysGridProps) {
             <div className="text-center">
               <h3 className="text-primaryText font-medium">{relay.name}</h3>
               {relay.description && (
-                <p className="text-primaryText text-sm mt-1">{relay.description}</p>
+                <p className="text-primaryText text-sm mt-1">
+                  {relay.description}
+                </p>
               )}
             </div>
           )}
