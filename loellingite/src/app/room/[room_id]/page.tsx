@@ -1,39 +1,37 @@
 import React from "react";
+import RoomDetailGrid from "@/components/feat/RoomDetailGrid";
+import { MdArrowBack, MdEdit, MdHome, MdAddAPhoto } from "react-icons/md";
 
 const RoomHome = () => {
+  // ダミーデータ
+  const cards = Array.from({ length: 8 }, (_, i) => ({
+    id: i + 1,
+  }));
+
   return (
-    <div className="min-h-screen h-screen flex flex-col bg-[#f7f5f3]">
+    <div className="min-h-screen h-screen flex flex-col bg-[#f7f5f3] relative">
       {/* ヘッダー */}
-      <header className="bg-[#7B5858] text-white px-0 pt-4 pb-3 flex items-center justify-between border-b border-white relative flex-shrink-0">
-        <span className="text-[20px] ml-12">ルーム名</span>
-        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mr-8">
-          {/* メニューアイコン（三本線） */}
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <rect y="5" width="24" height="2.4" rx="1.2" fill="#7B5858" />
-            <rect y="11" width="24" height="2.4" rx="1.2" fill="#7B5858" />
-            <rect y="17" width="24" height="2.4" rx="1.2" fill="#7B5858" />
-          </svg>
-        </div>
+      <header className="bg-[#7B5858] text-white h-14 flex items-center justify-between px-4 sticky top-0 z-10">
+        <button className="p-2"><MdArrowBack size={28} /></button>
+        <span className="text-lg font-medium">ルーム名</span>
+        <button className="p-2"><MdEdit size={24} /></button>
       </header>
 
-      {/* ルーム一覧 */}
+      {/* ルーム詳細グリッド */}
       <main className="flex-1 overflow-y-auto flex flex-col items-center py-6">
-        <div className="grid grid-cols-2 gap-5 w-[90%] max-w-[420px] mx-auto">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="bg-[#E0D9D9] border border-[#7B5858] rounded-2xl min-h-[160px] min-w-[140px] aspect-square flex items-center justify-center">
-              {/* カード内は空 */}
-            </div>
-          ))}
-        </div>
+        <RoomDetailGrid cards={cards} />
       </main>
 
-      {/* 下のボタン */}
-      <footer className="bg-[#7B5858] px-0 pt-8 pb-6 flex justify-center items-center gap-12 flex-shrink-0 min-w-0 overflow-x-hidden">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="w-16 md:w-[72px] aspect-square bg-[#FCFBFB] rounded-full flex items-center justify-center shrink-0">
-            {/* ボタン内は空 */}
-          </div>
-        ))}
+      {/* フッター */}
+      <footer className="bg-[#7B5858] text-white h-16 flex justify-around items-center fixed bottom-0 left-0 w-full z-20">
+        <div className="flex flex-col items-center">
+          <MdHome size={28} />
+          <span className="text-xs mt-1">ホーム</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <MdAddAPhoto size={28} />
+          <span className="text-xs mt-1">追加</span>
+        </div>
       </footer>
     </div>
   );
