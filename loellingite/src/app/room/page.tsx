@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import RoomGrid from '@/components/RoomGrid';
+import RoomGrid from '@/components/feat/RoomGrid';
 
 // ダミーデータ
 const rooms = Array.from({ length: 8 }, (_, i) => ({
