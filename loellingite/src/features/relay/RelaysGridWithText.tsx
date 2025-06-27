@@ -17,17 +17,17 @@ export default function RelaysGridWithText({
         {relays.map((relay) => (
           <li
             key={relay.id}
-            className="flex border-2 border-primaryBorder rounded-2xl p-5 mb-6 bg-primaryBackground items-start gap-4"
+            className="flex border-2 border-[#7B5858] rounded-2xl p-5 mb-6 bg-primaryBackground items-start gap-4"
           >
             <Link href={`/rooms/${relay.id}`} passHref>
-              <div className="p-4 flex items-center space-x-4">
+              <div className="p-2 flex items-center space-x-4">
                 <div className="w-14 h-14 rounded-full bg-primaryLight flex-shrink-0 border-primaryBorder border-[0.5px]"></div>
                 <div className="flex-grow">
                   <h2 className="text-lg font-medium text-primaryText">
-                    {relay.name}
+                    {relay.name || "No Name"}
                   </h2>
                   <p className="text-sm text-primaryText">
-                    {relay.description}
+                    {relay.description || "No Description"}
                   </p>
                 </div>
               </div>
