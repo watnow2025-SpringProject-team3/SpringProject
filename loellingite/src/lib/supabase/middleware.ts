@@ -36,15 +36,15 @@ export async function updateSession(request: NextRequest) {
   // IMPORTANT: DO NOT REMOVE auth.getUser()
 
   let user = null;
-  let authError: any = null;
+  let authError: Error | null = null;
 
   try {
     const result = await supabase.auth.getUser();
     user = result.data.user;
     authError = result.error;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Middleware auth error (catch):", error);
-    authError = error;
+    authError = error as Error;
     user = null;
   }
 
@@ -54,7 +54,6 @@ export async function updateSession(request: NextRequest) {
     // AuthSessionMissingErrorの場合は、セッションが存在しないということなので、未認証として扱う
     if (
       (authError.message && authError.message.includes('Auth session missing')) || 
-      authError.__isAuthError ||
       authError.name === 'AuthSessionMissingError'
     ) {
       console.log("Auth session missing - treating as unauthenticated");

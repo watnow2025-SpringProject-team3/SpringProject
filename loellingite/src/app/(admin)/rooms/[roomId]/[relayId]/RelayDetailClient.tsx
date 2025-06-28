@@ -106,7 +106,7 @@ export default function RelayDetailClient({
                 <div className="mb-4">
                   {post.image && (
                     <img 
-                      src={post.image} 
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/posts/${post.image}`}
                       alt="投稿画像" 
                       className="w-full h-32 object-cover rounded-lg"
                     />

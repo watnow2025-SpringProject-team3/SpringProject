@@ -38,8 +38,7 @@ export async function getServerUser() {
       // AuthSessionMissingErrorは予想される状況
       if (
         result.error.message?.includes('Auth session missing') ||
-        (result.error as any).__isAuthError ||
-        (result.error as any).name === 'AuthSessionMissingError'
+        'name' in result.error && result.error.name === 'AuthSessionMissingError'
       ) {
         return { user: null, error: null };
       }
@@ -47,15 +46,15 @@ export async function getServerUser() {
     }
     
     return { user: result.data.user, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorObj = error as Error;
     // AuthSessionMissingErrorは予想される状況
     if (
-      error.message?.includes('Auth session missing') ||
-      error.__isAuthError ||
-      error.name === 'AuthSessionMissingError'
+      errorObj.message?.includes('Auth session missing') ||
+      errorObj.name === 'AuthSessionMissingError'
     ) {
       return { user: null, error: null };
     }
-    return { user: null, error };
+    return { user: null, error: errorObj };
   }
 }

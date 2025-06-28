@@ -5,10 +5,10 @@ import { Relay } from "@/types/relay";
 import RelayDetailClient from "./RelayDetailClient";
 
 interface RelayDetailPageProps {
-  params: {
+  params: Promise<{
     roomId: string;
     relayId: string;
-  };
+  }>;
 }
 
 interface Post {

@@ -10,7 +10,7 @@ export default async function AuthLayout({
   let isLoggedIn = false;
   console.log("AuthLayout rendering...");
   try {
-    const supabase = createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient();
     const user = await supabase.auth.getUser();
 
     isLoggedIn = user.data.user !== null;

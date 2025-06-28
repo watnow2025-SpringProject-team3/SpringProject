@@ -6,9 +6,9 @@ import { Room } from "@/types";
 import RoomDetailClient from "@/app/(admin)/rooms/[roomId]/RoomDetailClient";
 
 interface RoomDetailPageProps {
-  params: {
+  params: Promise<{
     roomId: string;
-  };
+  }>;
 }
 
 async function fetchRoom(roomId: string): Promise<Room | null> {
