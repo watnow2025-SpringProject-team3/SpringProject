@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
   console.log("Auth callback received:", {
     code: code?.substring(0, 8) + "...",
     next,
+    userAgent: request.headers.get('user-agent')?.substring(0, 50) + "...",
   });
 
   if (code) {

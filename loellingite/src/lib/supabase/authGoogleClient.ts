@@ -11,11 +11,23 @@ export async function browserSignInWithGoogle() {
   } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      redirectTo: `${window.location.origin}/api/auth/callback`,
+      queryParams: {
+        access_type: "offline",
+        prompt: "consent",
+      },
+      skipBrowserRedirect: false,
     },
   });
   if (error) console.error("Googleログインエラー:", error.message);
-  if (url) window.location.href = url;
+  if (url) {
+    // User-Agentの問題を回避するため、windowオブジェクトを使用
+    const newWindow = window.open(url, "_self");
+    if (!newWindow) {
+      // ポップアップがブロックされた場合のフォールバック
+      window.location.href = url;
+    }
+  }
 }
 
 // クライアントコンポーネント用のGoogleログアウト

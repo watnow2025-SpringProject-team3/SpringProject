@@ -1,9 +1,28 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getCompatibleUserAgent } from "@/lib/auth-config";
 
 export async function updateSession(request: NextRequest) {
+  // Google OAuth認証の403エラー対策
+  const requestHeaders = new Headers(request.headers);
+  
+  // Google認証関連のパスの場合、User-Agentを調整
+  const isGoogleAuthPath = request.nextUrl.pathname.includes('/auth/callback') || 
+                          request.nextUrl.searchParams.has('code');
+  
+  if (isGoogleAuthPath) {
+    // GoogleのOAuth2で許可されるUser-Agentに変更
+    const originalUserAgent = requestHeaders.get('user-agent') || '';
+    const compatibleUserAgent = getCompatibleUserAgent(originalUserAgent);
+    if (compatibleUserAgent !== originalUserAgent) {
+      requestHeaders.set('user-agent', compatibleUserAgent);
+    }
+  }
+
   let supabaseResponse = NextResponse.next({
-    request,
+    request: {
+      headers: requestHeaders,
+    },
   });
 
   const supabase = createServerClient(
