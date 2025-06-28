@@ -1,55 +1,107 @@
-// リレー詳細画面
+import React from "react";
+import { getServerUser } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Relay } from "@/types/relay";
+import RelayDetailClient from "./RelayDetailClient";
 
-import Link from "next/link";
+interface RelayDetailPageProps {
+  params: Promise<{
+    roomId: string;
+    relayId: string;
+  }>;
+}
 
-type Post = {
-  id: string;
-  title: string;
-  createdAt: string;
+interface Post {
+  id: number;
+  created_at: string;
+  created_by: string;
   image: string;
-};
+  relay_id: number;
+  subtitle: string | null;
+}
 
-const dummyRelay = {
-  id: "r1",
-  name: "リレー1",
-  description: "このリレーは会議の進行用です。",
-  createdAt: "2025-06-10",
-};
+async function fetchRelayAndPosts(roomId: string, relayId: string): Promise<{
+  relay: Relay | null;
+  posts: Post[];
+}> {
+  try {
+    // 認証チェック
+    const { user, error: authError } = await getServerUser();
 
-const dummyPosts: Post[] = [
-  { id: "p1", title: "最初の投稿", createdAt: "2025-06-11", image: "/images/post1.jpg" },
-  { id: "p2", title: "議事録", createdAt: "2025-06-12", image: "/images/post2.jpg" },
-];
+    if (authError || !user) {
+      console.error("Authentication error:", authError);
+      return { relay: null, posts: [] };
+    }
 
-export default function RelayDetailPage() {
+    const supabase = await createSupabaseServerClient();
+
+    // リレー情報を取得
+    const { data: relay, error: relayError } = await supabase
+      .from("relay")
+      .select("*")
+      .eq("id", parseInt(relayId))
+      .eq("room_id", parseInt(roomId))
+      .single();
+
+    if (relayError || !relay) {
+      console.error("Error fetching relay:", relayError);
+      return { relay: null, posts: [] };
+    }
+
+    // ユーザーがこのルームにアクセス権があるかチェック
+    const { data: roomUser, error: roomUserError } = await supabase
+      .from("roomUser")
+      .select("*")
+      .eq("room_id", parseInt(roomId))
+      .eq("user_id", user.id)
+      .single();
+
+    if (roomUserError || !roomUser) {
+      console.error("User does not have access to this room");
+      return { relay: null, posts: [] };
+    }
+
+    // このリレーの投稿を取得
+    const { data: posts, error: postsError } = await supabase
+      .from("post")
+      .select("*")
+      .eq("relay_id", parseInt(relayId))
+      .order("created_at", { ascending: true });
+
+    if (postsError) {
+      console.error("Error fetching posts:", postsError);
+      return { relay, posts: [] };
+    }
+
+    return { relay, posts: posts || [] };
+  } catch (error) {
+    console.error("Unexpected error in fetchRelayAndPosts:", error);
+    return { relay: null, posts: [] };
+  }
+}
+
+export default async function RelayDetailPage({ params }: RelayDetailPageProps) {
+  const { roomId, relayId } = await params;
+  const { relay, posts } = await fetchRelayAndPosts(roomId, relayId);
+
+  if (!relay) {
+    // リレーが見つからない場合やアクセス権がない場合
+    return (
+      <RelayDetailClient 
+        relay={null} 
+        posts={[]} 
+        roomId={roomId} 
+        relayId={relayId} 
+      />
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-background pt-16">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-primary text-primary-foreground rounded shadow-md p-6 text-center mb-6">
-          <h1 className="text-4xl font-bold mb-2">{dummyRelay.name}</h1>
-          <p className="text-lg">{dummyRelay.description}</p>
-          <p className="text-sm mt-2">作成日: {dummyRelay.createdAt}</p>
-        </div>
-        <div className="space-y-6">
-          {dummyPosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/rooms/relays/posts/${post.id}`}
-              className="bg-card rounded shadow overflow-hidden block"
-            >
-              <img src={post.image} alt={post.title} className="w-full h-64 object-cover" />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-foreground mb-2">{post.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">作成日: {post.createdAt}</p>
-                <div className="flex justify-between items-center">
-                  <button className="text-primary hover:underline">いいね</button>
-                  <span className="text-primary hover:underline">コメント</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </main>
+    <RelayDetailClient 
+      relay={relay} 
+      posts={posts} 
+      roomId={roomId} 
+      relayId={relayId} 
+    />
   );
 }

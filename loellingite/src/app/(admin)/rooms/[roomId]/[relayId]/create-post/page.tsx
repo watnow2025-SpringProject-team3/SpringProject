@@ -1,60 +1,81 @@
-// 投稿作成画面
+import React from "react";
+import { getServerUser } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Relay } from "@/types/relay";
+import CreatePostClient from "./CreatePostClient";
 
-"use client";
+interface CreatePostPageProps {
+  params: Promise<{
+    roomId: string;
+    relayId: string;
+  }>;
+}
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+async function fetchRelayInfo(roomId: string, relayId: string): Promise<Relay | null> {
+  try {
+    // 認証チェック
+    const { user, error: authError } = await getServerUser();
 
-export default function CreatePostPage() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) {
-      setError("タイトルは必須です");
-      return;
+    if (authError || !user) {
+      console.error("Authentication error:", authError);
+      return null;
     }
-    // 本来はAPIで作成処理
-    alert("投稿を作成しました！");
-    router.back();
-  };
+
+    const supabase = await createSupabaseServerClient();
+
+    // リレー情報を取得
+    const { data: relay, error: relayError } = await supabase
+      .from("relay")
+      .select("*")
+      .eq("id", parseInt(relayId))
+      .eq("room_id", parseInt(roomId))
+      .single();
+
+    if (relayError || !relay) {
+      console.error("Error fetching relay:", relayError);
+      return null;
+    }
+
+    // ユーザーがこのルームにアクセス権があるかチェック
+    const { data: roomUser, error: roomUserError } = await supabase
+      .from("roomUser")
+      .select("*")
+      .eq("room_id", parseInt(roomId))
+      .eq("user_id", user.id)
+      .single();
+
+    if (roomUserError || !roomUser) {
+      console.error("User does not have access to this room");
+      return null;
+    }
+
+    return relay;
+  } catch (error) {
+    console.error("Unexpected error in fetchRelayInfo:", error);
+    return null;
+  }
+}
+
+export default async function CreatePostPage({ params }: CreatePostPageProps) {
+  const { roomId, relayId } = await params;
+  const relay = await fetchRelayInfo(roomId, relayId);
+
+  if (!relay) {
+    // リレーが見つからない場合やアクセス権がない場合
+    return (
+      <CreatePostClient 
+        relay={null} 
+        roomId={roomId} 
+        relayId={relayId} 
+      />
+    );
+  }
 
   return (
-    <main className="p-8 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">新規投稿作成</h1>
-      <form onSubmit={handleSubmit} className="bg-card p-6 rounded shadow space-y-4">
-        <div>
-          <label className="block mb-1 font-semibold">タイトル</label>
-          <input
-            type="text"
-            className="w-full border px-3 py-2 rounded"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            placeholder="投稿タイトルを入力"
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-semibold">本文</label>
-          <textarea
-            className="w-full border px-3 py-2 rounded"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            rows={5}
-            placeholder="投稿内容を入力"
-          />
-        </div>
-        {error && <p className="text-destructive">{error}</p>}
-        <button
-          type="submit"
-          className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/80"
-        >
-          作成
-        </button>
-      </form>
-    </main>
+    <CreatePostClient 
+      relay={relay} 
+      roomId={roomId} 
+      relayId={relayId} 
+    />
   );
 }

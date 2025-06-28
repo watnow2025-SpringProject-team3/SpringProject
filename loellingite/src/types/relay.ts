@@ -3,4 +3,5 @@ export interface Relay {
   title?: string;
   name?: string;
   description?: string;
+  theme?: string;
 }

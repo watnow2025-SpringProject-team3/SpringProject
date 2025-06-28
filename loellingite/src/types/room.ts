@@ -1,5 +1,5 @@
 export interface Room {
   id: number;
-  name: string;
-  description: string;
+  title: string;
+  created_at: string;
 }
