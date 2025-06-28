@@ -3,7 +3,7 @@
 export function getGoogleAuthConfig() {
   const isProduction = process.env.NODE_ENV === 'production';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-                  (isProduction ? 'https://your-domain.com' : 'http://localhost:3000');
+                  (isProduction ? 'https://nyecjljpwxdburikthgc.supabase.co' : 'http://localhost:3000');
 
   return {
     redirectTo: `${siteUrl}/api/auth/callback`,
