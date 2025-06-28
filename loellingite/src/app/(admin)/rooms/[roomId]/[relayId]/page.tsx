@@ -25,6 +25,15 @@ async function fetchRelayAndPosts(roomId: string, relayId: string): Promise<{
   posts: Post[];
 }> {
   try {
+    // パラメータの検証
+    const roomIdNum = parseInt(roomId);
+    const relayIdNum = parseInt(relayId);
+    
+    if (isNaN(roomIdNum) || isNaN(relayIdNum)) {
+      console.error("Invalid roomId or relayId parameters");
+      return { relay: null, posts: [] };
+    }
+
     // 認証チェック
     const { user, error: authError } = await getServerUser();
 
@@ -39,8 +48,8 @@ async function fetchRelayAndPosts(roomId: string, relayId: string): Promise<{
     const { data: relay, error: relayError } = await supabase
       .from("relay")
       .select("*")
-      .eq("id", parseInt(relayId))
-      .eq("room_id", parseInt(roomId))
+      .eq("id", relayIdNum)
+      .eq("room_id", roomIdNum)
       .single();
 
     if (relayError || !relay) {
@@ -52,7 +61,7 @@ async function fetchRelayAndPosts(roomId: string, relayId: string): Promise<{
     const { data: roomUser, error: roomUserError } = await supabase
       .from("roomUser")
       .select("*")
-      .eq("room_id", parseInt(roomId))
+      .eq("room_id", roomIdNum)
       .eq("user_id", user.id)
       .single();
 
@@ -65,7 +74,7 @@ async function fetchRelayAndPosts(roomId: string, relayId: string): Promise<{
     const { data: posts, error: postsError } = await supabase
       .from("post")
       .select("*")
-      .eq("relay_id", parseInt(relayId))
+      .eq("relay_id", relayIdNum)
       .order("created_at", { ascending: true });
 
     if (postsError) {

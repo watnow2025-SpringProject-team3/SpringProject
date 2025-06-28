@@ -78,8 +78,24 @@ export default function CreatePostClient({
         throw new Error("認証に失敗しました。ログインし直してください。");
       }
 
-      // 画像をストレージにアップロード
-      const fileName = `${Date.now()}_${image.name}`;
+      // 日本語ファイル名を安全に処理
+      const sanitizeFileName = (name: string) => {
+        const baseName = name.replace(/\.[^/.]+$/, ""); // 拡張子を除去
+        
+        // 日本語文字や特殊文字を除去し、英数字とアンダースコアのみに
+        const sanitized = baseName
+          .replace(/[^\w\-_.]/g, '') // 英数字、ハイフン、アンダースコア、ピリオド以外を除去
+          .replace(/[^a-zA-Z0-9_]/g, '_') // さらに厳密に英数字とアンダースコアのみに
+          .replace(/_+/g, '_') // 連続するアンダースコアを1つに
+          .replace(/^_|_$/g, '') // 先頭末尾のアンダースコアを除去
+          .slice(0, 50); // 長さ制限
+        
+        return sanitized || 'image'; // 空の場合はデフォルト名
+      };
+
+      const sanitizedBaseName = sanitizeFileName(image.name);
+      const extension = image.name.split('.').pop() || 'jpg';
+      const fileName = `${Date.now()}_${sanitizedBaseName}.${extension}`;
       console.log("Starting upload with user:", user.id);
       console.log("File name:", fileName);
       console.log("File size:", image.size);
@@ -128,8 +144,8 @@ export default function CreatePostClient({
 
       console.log("Post created successfully:", newPost);
       
-      // 成功したらリレー詳細ページに戻る
-      router.push(`/rooms/${roomId}/${relayId}`);
+      // 成功したらリレー詳細ページに戻る（強制リロードで新しい投稿を表示）
+      window.location.href = `/rooms/${roomId}/${relayId}`;
       
     } catch (error) {
       console.error("Error creating post:", error);

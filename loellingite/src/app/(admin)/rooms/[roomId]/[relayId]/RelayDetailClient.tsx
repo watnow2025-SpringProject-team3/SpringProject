@@ -109,6 +109,10 @@ export default function RelayDetailClient({
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/posts/${post.image}`}
                       alt="投稿画像" 
                       className="w-full h-32 object-cover rounded-lg"
+                      onError={(e) => {
+                        console.error('Image failed to load:', post.image);
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
                   )}
                 </div>
